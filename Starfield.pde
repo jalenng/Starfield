@@ -1,4 +1,4 @@
-Particle[] data = new Particle[1000];
+Particle[] data = new Particle[100];
 void setup()
 {
 	size(300, 300);
@@ -9,23 +9,30 @@ void setup()
 }
 void draw()
 {
-	background(0);
+	background(192, 224, 235);
 	for (int i = 0; i < data.length; i++)
 	{
 		data[i].move();
 		data[i].show();
+		data[i].update();
 	}
 }
 class NormalParticle implements Particle
 {
-	double myX, myY, myAngle, mySpeed;
+	double myX, myY, myAngle, mySpeed, mySize;
+	int[] myCircles;
 	color myColor;
 	NormalParticle()
 	{
 		myX = width / 2;
 		myY = height / 2;
 		myAngle = Math.random() * 2 * PI;
-		mySpeed = 5;
+		mySpeed = Math.random() * 3;
+		mySize = 0.01;
+		myCircles = new int[2];
+		for (int i = 0; i < myCircles.length; i += 2)
+		{
+		}
 	}
 	void move()
 	{
@@ -34,14 +41,24 @@ class NormalParticle implements Particle
 	}
 	void show()
 	{
-		fill(255);
-		ellipse((int)myX, (int)myY, 10, 10);
+		noStroke();
+		fill(255, 255, 255, 100);
+		for (int i = 0; i < myCircles.length; i += 2)
+		{
+			ellipse((int)(myCircles[i]), (int)(myCircles[i] + 1), (int)mySize, (int)mySize);
+		}
+	}
+	void update()
+	{
+		mySpeed *= 1.01;
+		mySize += 0.75;
 	}
 }
 interface Particle
 {
 	public void move();
 	public void show();
+	public void update();
 }
 class OddballParticle //uses an interface
 {
