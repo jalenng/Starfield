@@ -1,10 +1,15 @@
-Particle[] data = new Particle[100];
+Particle[] data = new Particle[10];
+PImage[] images = new PImage[5];
 void setup()
 {
 	size(300, 300);
 	for (int i = 0; i < data.length; i++)
 	{
 		data[i] = new NormalParticle();
+	}
+	for (int i = 0; i < images.length; i++)
+	{
+		images[i] = loadImage((String)("images/" + "cloud[" + i + "].png"));
 	}
 }
 void draw()
@@ -19,20 +24,19 @@ void draw()
 }
 class NormalParticle implements Particle
 {
-	double myX, myY, myAngle, mySpeed, mySize;
-	int[] myCircles;
-	color myColor;
+	double myX, myY, mySpeed, mySize, myDistanceFromCenter;
+	double myAngle;
+	String myFilename;
+	int myPhotoIndex;
 	NormalParticle()
 	{
 		myX = width / 2;
 		myY = height / 2;
 		myAngle = Math.random() * 2 * PI;
-		mySpeed = Math.random() * 3;
-		mySize = 0.01;
-		myCircles = new int[2];
-		for (int i = 0; i < myCircles.length; i += 2)
-		{
-		}
+		mySpeed = Math.random() * 0.1;
+		mySize = 1;
+		myFilename = (String)("images/" + "cloud[" + (int)(Math.random() * 5) + "].png");
+		myPhotoIndex = (int)(Math.random() * images.length);
 	}
 	void move()
 	{
@@ -42,16 +46,29 @@ class NormalParticle implements Particle
 	void show()
 	{
 		noStroke();
-		fill(255, 255, 255, 100);
-		for (int i = 0; i < myCircles.length; i += 2)
+		for (int i = 0; i < data.length; i++)
 		{
-			ellipse((int)(myCircles[i]), (int)(myCircles[i] + 1), (int)mySize, (int)mySize);
+			image(images[myPhotoIndex], 
+				(float)(myX - mySize / 2), 
+				(float)(myY - mySize / 2), 
+				(float)mySize,
+				(float)mySize);
 		}
 	}
 	void update()
 	{
-		mySpeed *= 1.01;
-		mySize += 0.75;
+		if (myDistanceFromCenter > 2000){
+			myX = width / 2;
+			myY = height / 2;
+			myAngle = Math.random() * 2 * PI;
+			mySpeed = Math.random() * 0.1;
+			mySize = 1;
+			myFilename = (String)("images/" + "cloud[" + (int)(Math.random() * 5) + "].png");
+			myPhotoIndex = (int)(Math.random() * images.length);
+		}
+		mySpeed *= 1.02;
+		mySize = myDistanceFromCenter * 2;
+		myDistanceFromCenter = sqrt(sq((float) myX - (width / 2)) + sq((float) myX - (height / 2)));
 	}
 }
 interface Particle
@@ -68,4 +85,3 @@ class JumboParticle //uses inheritance
 {
 	//your code here
 }
-
