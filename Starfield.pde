@@ -3,7 +3,7 @@ PImage[] cloudImages = new PImage[5];
 PImage evan;
 void setup()
 {
-	size(300, 300);
+	size(500, 500);
 	for (int i = 0; i < data.length; i++)
 	{
 		if (i != data.length - 1)
@@ -52,6 +52,8 @@ class NormalParticle implements Particle
 	void show()
 	{
 		noStroke();
+		fill(255, 255, 255, 10);
+		ellipse((float)myX, (float)myY, (float)mySize, (float)mySize);
 		for (int i = 0; i < data.length; i++)
 		{
 			image(cloudImages[myPhotoIndex], 
@@ -84,11 +86,12 @@ interface Particle
 }
 class OddballParticle implements Particle
 {
-	double myX, myY, myRotation;
+	double myX, myY, myRotation, mySpeed;
 	OddballParticle()
 	{
 		myX = width / 2;
 		myY = width / 2;
+		mySpeed = 10;
 		myRotation = 0;
 	}
 	void show()
@@ -101,9 +104,12 @@ class OddballParticle implements Particle
 	void move()
 	{
 		myRotation += 0.05;
+		//myX += mySpeed;
+		//myY += mySpeed;
 	}
 	void update()
 	{
+
 	}
 }
 class JumboParticle extends OddballParticle
