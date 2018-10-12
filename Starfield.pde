@@ -1,20 +1,27 @@
-Particle[] data = new Particle[10];
-PImage[] images = new PImage[5];
+Particle[] data = new Particle[15];
+PImage[] cloudImages = new PImage[5];
+PImage evan;
 void setup()
 {
 	size(300, 300);
 	for (int i = 0; i < data.length; i++)
 	{
-		data[i] = new NormalParticle();
+		if (i != data.length - 1)
+			data[i] = new NormalParticle();
+		else
+			data[i] = new OddballParticle();
 	}
-	for (int i = 0; i < images.length; i++)
+	for (int i = 0; i < cloudImages.length; i++)
 	{
-		images[i] = loadImage((String)("images/" + "cloud[" + i + "].png"));
+		cloudImages[i] = loadImage((String)("images/" + "cloud[" + i + "].png"));
 	}
+	evan = loadImage("images/evan.png");
 }
 void draw()
 {
-	background(192, 224, 235);
+	//background(117, 184, 252);
+	fill(117, 184, 252, 100);
+	rect(0, 0, width, height);
 	for (int i = 0; i < data.length; i++)
 	{
 		data[i].move();
@@ -33,10 +40,9 @@ class NormalParticle implements Particle
 		myX = width / 2;
 		myY = height / 2;
 		myAngle = Math.random() * 2 * PI;
-		mySpeed = Math.random() * 0.1;
-		mySize = 1;
-		myFilename = (String)("images/" + "cloud[" + (int)(Math.random() * 5) + "].png");
-		myPhotoIndex = (int)(Math.random() * images.length);
+		mySpeed = (Math.random() * 0.05) + 0.05;
+		mySize = 0;
+		myPhotoIndex = (int)(Math.random() * cloudImages.length);
 	}
 	void move()
 	{
@@ -48,7 +54,7 @@ class NormalParticle implements Particle
 		noStroke();
 		for (int i = 0; i < data.length; i++)
 		{
-			image(images[myPhotoIndex], 
+			image(cloudImages[myPhotoIndex], 
 				(float)(myX - mySize / 2), 
 				(float)(myY - mySize / 2), 
 				(float)mySize,
@@ -61,14 +67,13 @@ class NormalParticle implements Particle
 			myX = width / 2;
 			myY = height / 2;
 			myAngle = Math.random() * 2 * PI;
-			mySpeed = Math.random() * 0.1;
-			mySize = 1;
+			mySpeed = (Math.random() * 0.03) + 0.01;
 			myFilename = (String)("images/" + "cloud[" + (int)(Math.random() * 5) + "].png");
-			myPhotoIndex = (int)(Math.random() * images.length);
+			myPhotoIndex = (int)(Math.random() * cloudImages.length);
 		}
 		mySpeed *= 1.02;
-		mySize = myDistanceFromCenter * 2;
 		myDistanceFromCenter = sqrt(sq((float) myX - (width / 2)) + sq((float) myX - (height / 2)));
+		mySize = myDistanceFromCenter * 2;
 	}
 }
 interface Particle
@@ -77,11 +82,31 @@ interface Particle
 	public void show();
 	public void update();
 }
-class OddballParticle //uses an interface
+class OddballParticle implements Particle
 {
-	//your code here
+	double myX, myY, myRotation;
+	OddballParticle()
+	{
+		myX = width / 2;
+		myY = width / 2;
+		myRotation = 0;
+	}
+	void show()
+	{
+		translate((float)myX, (float)myY);
+		rotate((float)myRotation);
+		image(evan, -75, -75, 150, 150);
+		resetMatrix();
+	}
+	void move()
+	{
+		myRotation += 0.05;
+	}
+	void update()
+	{
+	}
 }
-class JumboParticle //uses inheritance
+class JumboParticle extends OddballParticle
 {
 	//your code here
 }
