@@ -68,7 +68,7 @@ class NormalParticle implements Particle
 	}
 	void update()
 	{
-		if (myDistanceFromCenter > 2000){
+		if (myDistanceFromCenter > 3000){
 			myX = width / 2;
 			myY = height / 2;
 			myAngle = Math.random() * 2 * PI;
@@ -106,13 +106,13 @@ class OddballParticle implements Particle
 	}
 	void move()
 	{
-		myX = (width / 2) + (Math.cos(myAngle) * 100);
-		myY = (height / 2) + (Math.sin(myAngle) * 100);
+		myX = (width / 2) + (Math.cos(myAngle) * 125);
+		myY = (height / 2) + (Math.sin(myAngle) * 125);
 	}
 	void update()
 	{
-		myRotation += 0.05;
-		myAngle += 0.02;
+		myRotation += 0.005 * Math.sin(myAngle * 3);
+		myAngle += 0.005;
 	}
 }
 
